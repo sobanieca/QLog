@@ -1,0 +1,669 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>QLog</name>
+    </assembly>
+    <members>
+        <member name="T:QLog.Areas.Base.QArea">
+            <summary>
+            Abstract class that is used as a base class for a new user defined areas.
+            </summary>
+        </member>
+        <member name="P:QLog.Areas.Base.QArea.AreaColor">
+            <summary>
+            Rgb color in format: "R,G,B"
+            </summary>
+        </member>
+        <member name="P:QLog.Areas.Base.QArea.Severity">
+            <summary>
+            Severity value for a given area
+            </summary>
+        </member>
+        <member name="T:QLog.Areas.Base.QAreaColor">
+            <summary>
+            Class that is used to store the color of an area.
+            </summary>
+        </member>
+        <member name="T:QLog.Areas.Default.QCritical">
+            <summary>
+            Represents the QCritical logs area.
+            </summary>
+        </member>
+        <member name="T:QLog.Areas.Default.QDebug">
+            <summary>
+            Represents the QDebug logs area.
+            </summary>
+        </member>
+        <member name="T:QLog.Areas.Default.QError">
+            <summary>
+            Represents the QError logs area.
+            </summary>
+        </member>
+        <member name="T:QLog.Areas.Default.QInfo">
+            <summary>
+            Represents the QInfo logs area.
+            </summary>
+        </member>
+        <member name="T:QLog.Areas.Default.QTrace">
+            <summary>
+            Represents the QTrace logs area.
+            </summary>
+        </member>
+        <member name="T:QLog.Areas.Default.QWarn">
+            <summary>
+            Represents the QWarn logs area.
+            </summary>
+        </member>
+        <member name="M:QLog.Components.ComponentsService.InitializeComponents">
+            <summary>
+            Initializes QLog with components found within assembly
+            </summary>
+        </member>
+        <member name="M:QLog.Components.ComponentsService.ResolveRepository">
+            <summary>
+            Resolves correct repository basing on the data source info
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.ComponentsService.SilentModeHandle(System.Exception)">
+            <summary>
+            Handles an exception occured during logging. If silent mode is disabled an exception will be thrown further.
+            </summary>
+            <param name="exceptionToHandle"></param>
+        </member>
+        <member name="T:QLog.Components.Abstract.IBuffer">
+            <summary>
+            Interface for service buffer. Buffer needs to be thread safe.
+            </summary>
+        </member>
+        <member name="M:QLog.Components.Abstract.IBuffer.Enqueue(QLog.Models.QLogEntry,System.Boolean@)">
+            <summary>
+            Enqueues log inside buffer. Returns information if buffer is full and needs to be flushed.
+            </summary>
+            <param name="log"></param>
+            <param name="isBufferFull"></param>
+        </member>
+        <member name="M:QLog.Components.Abstract.IBuffer.DequeueLogEntries">
+            <summary>
+            Returns list of logs stored inside buffer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Abstract.IBuffer.IsEmpty">
+            <summary>
+            Returns true if buffer is empty.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:QLog.Components.Abstract.IConfig">
+            <summary>
+            Interface for configuration reading.
+            </summary>
+        </member>
+        <member name="M:QLog.Components.Abstract.IConfig.IsValidLogArea(System.Type)">
+            <summary>
+            Determines if log with provided area is valid within current configuration and should be stored.
+            </summary>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Abstract.IConfig.IsStacktraceEnabled">
+            <summary>
+            Determines whether stacktrace information is enabled.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Abstract.IConfig.IsAsyncLogEnabled">
+            <summary>
+            Determines whether asynchronous logging is enabled.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Abstract.IConfig.IsAsyncLogEnabled(System.Type)">
+            <summary>
+            Determines whether asynchronous logging for given area is enabled.
+            </summary>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Abstract.IConfig.IsSilentModeEnabled">
+            <summary>
+            Determines whether silent mode is enabled.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Abstract.IConfig.GetDataSourcePostfix">
+            <summary>
+            Returns the QLog postfix that will be used when saving logs in data source. For instance it will be added to table name.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Abstract.IConfig.GetDataSource">
+            <summary>
+            Returns data source - for instance connection string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:QLog.Components.Abstract.IEnvironment">
+            <summary>
+            Interface for retrieving log entry depending on the environment (Desktop app, Web app, etc.)
+            </summary>
+        </member>
+        <member name="M:QLog.Components.Abstract.IEnvironment.GetLog(System.Type,System.String,System.String,System.String)">
+            <summary>
+            Returns QLogEntry that will be stored inside data source.
+            </summary>
+            <param name="area"></param>
+            <param name="msg"></param>
+            <param name="className"></param>
+            <param name="methodName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:QLog.Components.Abstract.IRepository">
+            <summary>
+            Interface for objects that are responsible for all operations on the logs storage
+            </summary>
+        </member>
+        <member name="M:QLog.Components.Abstract.IRepository.Save(QLog.Models.QLogEntry)">
+            <summary>
+            Saves single log entry in data source.
+            </summary>
+            <param name="log"></param>
+        </member>
+        <member name="M:QLog.Components.Abstract.IRepository.SaveAll(System.Collections.Generic.List{QLog.Models.QLogEntry})">
+            <summary>
+            Saves list of entries in data source.
+            </summary>
+            <param name="logs"></param>
+        </member>
+        <member name="M:QLog.Components.Abstract.IRepository.CleanLogsOlderThan(System.Int32)">
+            <summary>
+            Cleans the log entries older than specified number of days from the database
+            </summary>
+            <param name="noDays"></param>
+        </member>
+        <member name="T:QLog.Components.Buffer.QLogBuffer">
+            <summary>
+            Base buffer component that is being used by QLog forks.
+            </summary>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.#ctor">
+            <summary>
+            Creates new instance of desktop buffer
+            </summary>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.GetBufferMaxCount">
+            <summary>
+            Returns the maximum number of log entries that can be stored inside buffer. 
+            If this number is exceeded then the logger will be force to flush content of the buffer to the database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.Enqueue(QLog.Models.QLogEntry,System.Boolean@)">
+            <summary>
+            Saves single QLog entry in to the buffer and returns information whether buffer is full and should be flushed
+            </summary>
+            <param name="log"></param>
+            <param name="isBufferFull"></param>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.EnqueueWithAdditionalBuffer(QLog.Models.QLogEntry,System.Boolean@)">
+            <summary>
+            Tries to enqueue an object with an additional buffer. If it's not possible - returns false.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.IsRequestBufferFull">
+            <summary>
+            Returns information whether the request specific buffer is full and should be flushed apart from the standard Flush() policy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.EnqueueLogWithStaticBuffer(QLog.Models.QLogEntry,System.Boolean@)">
+            <summary>
+            Enqueues log entry using static queue buffer _logEntries
+            </summary>
+            <param name="log"></param>
+            <param name="isBufferFull"></param>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.DequeueLogEntries">
+            <summary>
+            Retrieves QLog entries from the buffer that will be later saved to the database. Number of entries taken can be modified through configuration file. 
+            Otherwise default value will be applied.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.DequeueAdditionalBufferLogEntries">
+            <summary>
+            Retrieves log entries from the request buffer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.DequeueStaticBufferLogEntries">
+            <summary>
+            Retrieves log entries from the static buffer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.IsEmpty">
+            <summary>
+            Returns information whether the buffer is empty, or whether it should be flushed to the database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.IsAdditionalBufferEmpty">
+            <summary>
+            Returns information whether request specific buffer is empty
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.IsStaticBufferEmpty">
+            <summary>
+            Returns information whether static buffer is empty
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Buffer.QLogBuffer.IsStaticBufferFull">
+            <summary>
+            Returns information whether the static buffer is full and should be flushed apart from the standard Flush() policy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:QLog.Components.Config.QLogConfig">
+            <summary>
+            Base configuration component that is being used by QLog forks.
+            </summary>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.GetSetting(System.String)">
+            <summary>
+            Reads the current setting basing on the available environment tools
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.TryReadFromAzureConfig(System.String@,System.String)">
+            <summary>
+            Tries to read specified configuration setting from the Azure service configuration
+            </summary>
+            <param name="value"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsValidLogArea(System.Type)">
+            <summary>
+            Validates current log area against the area policy specified in the configuration file
+            </summary>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsStacktraceEnabled">
+            <summary>
+            Specifies whether stacktrace usage is enabled
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsAsyncLogEnabled(System.Type)">
+            <summary>
+            Specifies whether asynchronous log writing for given log area is enabled. If it is enabled, then all log entries will be 
+            stored in the buffer and later flushed to the database. Otherwise all messages will be logged directly to the database
+            </summary>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsAsyncLogEnabled">
+            <summary>
+            Specifies whether asynchronous log writing for any log area is enabled. If it is enabled, then all log entries will be 
+            stored in the buffer and later flushed to the database. Otherwise all messages will be logged directly to the database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsSilentModeEnabled">
+            <summary>
+            Specifies whether silent mode is enabled or explicitly disabled
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.GetDataSourcePostfix">
+            <summary>
+            Returns the QLog postfix that will be used when saving logs in data source. For instance it will be added to table name.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.ValidateLogArea(System.String,System.Type)">
+            <summary>
+            Validates the specified area against against the current settings of severity level
+            </summary>
+            <param name="strCfgArea"></param>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.ValidateAreaFilter(System.String,System.Type,System.Boolean)">
+            <summary>
+            In case when user specifies directly which areas he wants to be logged, or
+            which areas should be ignored this function validates the given area against such policy
+            </summary>
+            <param name="filter"></param>
+            <param name="area"></param>
+            <param name="ifFoundReturn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.GetDataSource">
+            <summary>
+            Returns data source - for instance connection string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:QLog.Components.Environment.QLogEnvironment">
+            <summary>
+            Base log component that is being used by QLog forks.
+            </summary>
+        </member>
+        <member name="M:QLog.Components.Environment.QLogEnvironment.GetLog(System.Type,System.String,System.String,System.String)">
+            <summary>
+            Returns QLog entry basing on the passed informations
+            </summary>
+            <param name="area"></param>
+            <param name="msg"></param>
+            <param name="className"></param>
+            <param name="methodName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Repository.AzureTableRepository.Save(QLog.Models.QLogEntry)">
+            <summary>
+            Saves single log entry in data source.
+            </summary>
+            <param name="log"></param>
+        </member>
+        <member name="M:QLog.Components.Repository.AzureTableRepository.SaveAll(System.Collections.Generic.List{QLog.Models.QLogEntry})">
+            <summary>
+            Saves list of entries in data source.
+            </summary>
+            <param name="logs"></param>
+        </member>
+        <member name="M:QLog.Components.Repository.AzureTableRepository.CleanLogsOlderThan(System.Int32)">
+            <summary>
+            Cleans the log entries older than specified number of days from the database
+            </summary>
+            <param name="noDays"></param>
+        </member>
+        <member name="T:QLog.DataSource.Sql.Exceptions.QLogDatabaseConnectException">
+            <summary>
+            Exception that is being thrown when logger is unable to connect to the database.
+            </summary>
+        </member>
+        <member name="T:QLog.Exceptions.QLogNotInitializedException">
+            <summary>
+            Exception that is being thrown when logger hasn't been initialized. Namely - when Logger.Initialize() method hasn't been called.
+            </summary>
+        </member>
+        <member name="T:QLog.Exceptions.QLogSilentModeHandleException">
+            <summary>
+            Exception that is being thrown when logger is unable to verify if the silent mode is enabled or disabled.
+            </summary>
+        </member>
+        <member name="T:QLog.Helpers.AreaHelper">
+            <summary>
+            This helper is responsible for obtaining the area information. It is used to prevent using reflection if only it is possible.
+            </summary>
+        </member>
+        <member name="T:QLog.Helpers.MessageHelper">
+            <summary>
+            Simple helper for obtaining message text basing on the passed arguments.
+            </summary>
+        </member>
+        <member name="T:QLog.Helpers.TruncateHelper">
+            <summary>
+            Helper for truncating strings to the specified length. Used mainly to truncate all fields of the QLog
+            that are longer then the corresponding columns definition in the database.
+            </summary>
+        </member>
+        <member name="T:QLog.HttpApplication.QLogHttpApplication">
+            <summary>
+            HttpApplication that sets up handlers for all
+            events that are connected with QLog mechanisms.
+            </summary>
+        </member>
+        <member name="M:QLog.HttpApplication.QLogHttpApplication.#ctor">
+            <summary>
+            Constructor that sets up all event handlers
+            </summary>
+        </member>
+        <member name="T:QLog.Logger">
+            <summary>
+            Main tool that is responsible for logging
+            </summary>
+        </member>
+        <member name="M:QLog.Logger.LogTrace(System.String)">
+            <summary>
+            Writes a log at the QTrace area with a specified message
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:QLog.Logger.LogTrace(System.String,System.Object[])">
+            <summary>
+            Writes a log at the QTrace area with a specified message (applying String.Format() first)
+            </summary>
+            <param name="msg"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:QLog.Logger.LogTrace(System.Exception)">
+            <summary>
+            Writes a log at the QTrace area with a specified exception
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogTrace(System.String,System.Exception)">
+            <summary>
+            Writes a log at the QTrace area with a specified message and exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogDebug(System.String)">
+            <summary>
+            Writes a log at the QDebug area with a specified message
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:QLog.Logger.LogDebug(System.String,System.Object[])">
+            <summary>
+            Writes a log at the QDebug area with a specified message (applying String.Format() first)
+            </summary>
+            <param name="msg"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:QLog.Logger.LogDebug(System.Exception)">
+            <summary>
+            Writes a log at the QDebug area with a specified exception
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogDebug(System.String,System.Exception)">
+            <summary>
+            Writes a log at the QDebug area with a specified message and exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogInfo(System.String)">
+            <summary>
+            Writes a log at the QInfo area with a specified message
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:QLog.Logger.LogInfo(System.String,System.Object[])">
+            <summary>
+            Writes a log at the QInfo area with a specified message (applying String.Format() first)
+            </summary>
+            <param name="msg"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:QLog.Logger.LogInfo(System.Exception)">
+            <summary>
+            Writes a log at the QInfo area with a specified exception
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogInfo(System.String,System.Exception)">
+            <summary>
+            Writes a log at the QInfo area with a specified message and exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogWarn(System.String)">
+            <summary>
+            Writes a log at the QWarn area with a specified message
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:QLog.Logger.LogWarn(System.String,System.Object[])">
+            <summary>
+            Writes a log at the QWarn area with a specified message (applying String.Format() first)
+            </summary>
+            <param name="msg"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:QLog.Logger.LogWarn(System.Exception)">
+            <summary>
+            Writes a log at the QWarn area with a specified exception
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogWarn(System.String,System.Exception)">
+            <summary>
+            Writes a log at the QWarn area with a specified message and exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogError(System.String)">
+            <summary>
+            Writes a log at the QError area with a specified message
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:QLog.Logger.LogError(System.String,System.Object[])">
+            <summary>
+            Writes a log at the QError area with a specified message (applying String.Format() first)
+            </summary>
+            <param name="msg"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:QLog.Logger.LogError(System.Exception)">
+            <summary>
+            Writes a log at the QError area with a specified exception
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogError(System.String,System.Exception)">
+            <summary>
+            Writes a log at the QError area with a specified message and exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogCritical(System.String)">
+            <summary>
+            Writes a log at the QCritical area with a specified message
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:QLog.Logger.LogCritical(System.String,System.Object[])">
+            <summary>
+            Writes a log at the QCritical area with a specified message (applying String.Format() first)
+            </summary>
+            <param name="msg"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:QLog.Logger.LogCritical(System.Exception)">
+            <summary>
+            Writes a log at the QCritical area with a specified exception
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.LogCritical(System.String,System.Exception)">
+            <summary>
+            Writes a log at the QCritical area with a specified message and exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.Log``1(System.String)">
+            <summary>
+            Writes a log at the specified QArea with a specified message
+            </summary>
+            <typeparam name="Area"></typeparam>
+            <param name="msg"></param>
+        </member>
+        <member name="M:QLog.Logger.Log``1(System.String,System.Object[])">
+            <summary>
+            Writes a log at the specified QArea with a specified message (applying String.Format() first)
+            </summary>
+            <typeparam name="Area"></typeparam>
+            <param name="msg"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:QLog.Logger.Log``1(System.Exception)">
+            <summary>
+            Writes a log at the specified QArea with a specified exception
+            </summary>
+            <typeparam name="Area"></typeparam>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.Log``1(System.String,System.Exception)">
+            <summary>
+            Writes a log at the specified QArea with a specified message and exception
+            </summary>
+            <typeparam name="Area"></typeparam>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:QLog.Logger.Flush">
+            <summary>
+            Runs a new thread that saves asynchronously all of the logs stored in the IBuffer using IRepository
+            </summary>
+        </member>
+        <member name="M:QLog.Logger.Flush(System.Boolean)">
+            <summary>
+            Saves all of the logs stored in the IBuffer using IRepository
+            </summary>
+            <param name="async">Specifies whether saving to the database should be done asynchronously or synchronously</param>
+        </member>
+        <member name="M:QLog.Logger.DoLog``1(System.String,System.Exception,System.Object[])">
+            <summary>
+            Creates and saves a log message at the specified QArea. Depending on the settings the message is being saved to buffer 
+            that will be flushed asynchronously later, or directly to the database via IRepository.
+            </summary>
+            <param name="area"></param>
+            <param name="msg"></param>
+            <param name="exception"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:QLog.Logger.FlushBuffer(System.Object)">
+            <summary>
+            Saves the buffer content into the database using given IRepository
+            </summary>
+        </member>
+        <member name="M:QLog.Logger.GetCallingClassAndMethod">
+            <summary>
+            Retrieves the class and method that called log method. If stacktrace usage is disabled, then no informations about method and class will be set.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:QLog.Models.QLogEntry">
+            <summary>
+            Model representing single QLog entry.
+            </summary>
+        </member>
+        <member name="T:QLog.Utils">
+            <summary>
+            Main tool that offers interface for operation on logs
+            </summary>
+        </member>
+        <member name="M:QLog.Utils.CleanLogsOlderThan(System.Int32)">
+            <summary>
+            Cleans the logs older than given number of days.
+            </summary>
+            <param name="noDays"></param>
+        </member>
+    </members>
+</doc>
