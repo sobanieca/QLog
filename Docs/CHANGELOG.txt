@@ -1,0 +1,58 @@
+QLog - Quick logging for Windows Azure .NET applications
+
+CHANGELOG:
+1.4.1.0 -> Increasing version due to NuGet package problems
+1.4.0.0 -> QLog is now supporting only Windows Azure .NET applications and uses Windows Azure Table storage to store all logs.
+1.3.0.0 -> New QLogBrowser version. QPerformance feature removed. Custom QLog table name [03.11.2012]:
+	* New QLogBrowser has been introduced with areas scanning option enabled. From now on, I want to keep areas
+	of logging one of the most important features in QLog so they needed new UI to support all of them.
+	* I've dropped the idea of performance loggin with QLog. I mean, I have removed QPerformance areas.
+	If you really need to place performance checkpoints, you can do it by creating custom area like
+	QPerformance and by placing proper logs in proper places inside the code. However do it only if
+	you can't get enough information from profiler.
+	* Custom QLog table name setting has been introduced.
+1.2.4.0 -> Method Utils.OccuredLog() now allows to pass date in order to find log from given area [21.05.2012]:
+	* QLog.Utils.OccuredLog() method now accepts also DateTime argument additionaly to the TimeSpan argument
+	type. It is especially useful when worker that performs log occurency check is not being run on a regular
+	basis.
+1.2.3.1 -> Moved the utilities to the another tool  QLog.Utils [11.05.2012]:
+	* I've realized that in future there may become available more utilities for QLog so I decided
+	to move all methods that are related to the maintenance job like OccuredLog() or CleanLogsOlderThan()
+	to the another tool - QLog.Utils. By this simple operation, I've simplified the intellisense hints
+	that are being displayed when You are using QLog.Logger class.
+1.2.2.1 -> Additional methods for logs clean up introduced [10.05.2012]:
+	* Introduced two methods: CleanLogsMoreThan() and CleanPerformanceMoreThan() that serve the same
+	purpose as CleanLogsOlderThan() and CleanPerformanceOlderThan(), but instead of deleting the
+	records basing on their "age", it bases on the provided limit of records that are supposed to be
+	stored in the database. Using this methods allows to provide a limit like 400 000 rows of logs so the
+	database will not be overweighted, if it's size is limited in any way.
+1.2.1.1 -> Areas namespace corrected [21.04.2012]:
+	* Areas namespace for QLog has been divided into Base and Default namespaces.
+1.2.1.0 -> DRY principle, ILmerge, minimize button [19.04.2012]:
+	* I thought that I have found an excuse to omit the DRY principle while designing QLog's code.
+	Now I have realized that there are no excuses for omitting the DRY principle, so I have
+	modified the source code to avoid any "blazing" code repetitions.
+	* In previous versions there was a requirement to add a reference to two dll's: QLog.dll and
+	QLog.****.dll responsible for components. There was an idea behind this solution but now I 
+	have changed my mind and created a single merged DLL for all QLog components libraries.
+	* Minimize button has been added to QLogBrowser. I must have disabled it by mistake.
+1.2.0.0 -> Areas of logging definition has been changed [11.04.2012]: 
+	* Now instead of using static members, there are being created instances of a QArea.
+	* AreaHelper introduced in order to avoid the reflection for severity and area color reading
+	if possible.
+1.1.0.0 -> Areas, new areas of logs, distributed transaction handling [22.03.2012]:
+	* Logs areas were introduced. Please refer to the documentation for more info.
+	* Introduced two new areas of logging: TRACE and CRITICAL.
+	* Any connection to the database made by QLog won't be enlisted in any transaction.
+	* QLogBrowser "Created "to"" is now set to DateTime.UtcNow.AddDays(1).
+1.0.2.0 -> Silent mode handling modification [21.03.2012]:
+	* QLogSilentModeException has been introduced. Basically, when silent mode is enabled
+	the only exception that may be thrown by logger is QLogNotInitialized exception and 
+	QLogSilentModeException (when logger is unable to find out if silent mode is enabled or disabled).
+1.0.1.0 -> Silent mode and stacktrace service [20.03.2012]:
+	* Silent mode has been added and is enabled by default. If You want to check why 
+	Your logs are not logged into database, then You have to disable silent mode explicitly in
+	the configuration. (Please refer to the documentation)
+	* Stacktrace service has been modified - in case when logging is executed inside lambda expression or
+	any other anonymous type that doesn't have it's ReflectedType property set - no information about 
+	class and method will be logged.
