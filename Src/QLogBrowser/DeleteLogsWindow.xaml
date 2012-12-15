@@ -1,0 +1,13 @@
+﻿<Window x:Class="QLogBrowser.DeleteLogsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Logs deleting" Height="254" Width="390" ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" KeyDown="Window_KeyDown">
+    <Grid Margin="7,8,7,12">
+        <Label Content="Logs deleting" Height="32" HorizontalAlignment="Left" Margin="0,12,0,0" Name="label1" VerticalAlignment="Top" Width="370" FontSize="16" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" />
+        <Button Content="Delete" HorizontalAlignment="Left" Margin="10,145,0,24" Name="btnDelete" Width="130" FontSize="14" TabIndex="4" Click="btnDelete_Click" />
+        <Label Content="Delete logs older than" Height="28" HorizontalAlignment="Left" Margin="42,81,0,0" Name="label2" VerticalAlignment="Top" Width="156" FontSize="14" />
+        <TextBox Height="28" HorizontalAlignment="Right" Margin="0,81,130,0" Name="txtDays" VerticalAlignment="Top" Width="37" FontSize="14" BorderBrush="Black" VerticalContentAlignment="Center" Text="7" TabIndex="3" LostFocus="txtDays_LostFocus" />
+        <Button Content="Cancel" Margin="230,145,10,24" Name="btnCancel" FontSize="14" TabIndex="5" Click="btnCancel_Click" />
+        <Label Content="days. (UTC)" FontSize="14" Height="28" Margin="0,81,40,0" Name="label3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="85" />
+    </Grid>
+</Window>

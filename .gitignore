@@ -1,0 +1,7 @@
+bin/
+obj/
+*.snk
+*.suo
+csx/
+*.user
+*.pfx

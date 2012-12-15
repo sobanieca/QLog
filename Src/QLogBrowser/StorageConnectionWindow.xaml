@@ -1,0 +1,23 @@
+﻿<Window x:Class="QLogBrowser.StorageConnectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Storage connection setup" Height="405.741" Width="520" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" ResizeMode="NoResize" Topmost="True" KeyDown="Window_KeyDown" UseLayoutRounding="False">
+    <Grid Margin="0,0,0,10">
+        <Label Content="Storage connection setup" HorizontalAlignment="Left" Margin="0,14,0,0" Name="label1" FontSize="16" FontWeight="Bold" Width="498" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="37" VerticalAlignment="Top" />
+        <Label Content="Account Name:&#xD;&#xA;" Height="28" HorizontalAlignment="Left" Margin="29,92,0,0" Name="label2" VerticalAlignment="Top" Width="111" FontSize="14" />
+        <Label Content="Account Key:" FontSize="14" Height="28" HorizontalAlignment="Left" Margin="29,125,0,0" Name="label3" VerticalAlignment="Top" Width="111" />
+        <Label Content="Emulator:" FontSize="14" Height="28" HorizontalAlignment="Left" Margin="29,153,0,0" Name="lblLogin" VerticalAlignment="Top" Width="111" IsEnabled="True" />
+        <Label Content="Postfix:" FontSize="14" Height="28" HorizontalAlignment="Left" Margin="29,181,0,0" Name="lblPassword" VerticalAlignment="Top" Width="111" />
+        <Button Content="Save" Height="42" HorizontalAlignment="Left" Margin="29,309,0,0" Name="btnSave" VerticalAlignment="Top" Width="130" FontSize="14" Click="btnSave_Click" TabIndex="6" />
+        <Button Content="Cancel" Height="42" Margin="0,309,30,0" Name="btnCancel" VerticalAlignment="Top" HorizontalAlignment="Right" Width="130" FontSize="14" Click="btnCancel_Click" TabIndex="8" Grid.ColumnSpan="2" Grid.Column="1" />
+        <ComboBox Height="28" Margin="29,59,30,0" x:Name="cmbConnections" VerticalAlignment="Top" IsEditable="False" BorderBrush="Black" VerticalContentAlignment="Center" SelectionChanged="cmbConnections_SelectionChanged" Grid.ColumnSpan="3" />
+        <TextBox BorderBrush="Black" Height="28" HorizontalAlignment="Right" Margin="0,92,30,0" x:Name="txtAccountName" TabIndex="1" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="302" KeyUp="UpdateConnectionCombobox" Grid.ColumnSpan="3" />
+        <Button Content="Delete" FontSize="14" Height="29" Margin="182,316,226,0" Name="btnDelete" TabIndex="7" VerticalAlignment="Top" Click="btnDelete_Click" />
+        <CheckBox x:Name="cbxDevelopmentStorage" Content="Use Development Storage" Margin="182,158,0,0" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="302" Checked="DisableAccountKey" Unchecked="EnableAccountKey"/>
+        <TextBlock HorizontalAlignment="Left" Margin="29,264,0,0" TextWrapping="Wrap" Text="Postfix is the table name postfix specified in QLogDataSourcePostfix application setting. It is not required field." VerticalAlignment="Top" Grid.ColumnSpan="3" Width="455" Height="40"/>
+        <TextBox BorderBrush="Black" Height="28" HorizontalAlignment="Right" Margin="0,125,30,0" x:Name="txtAccountKey" TabIndex="1" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="302" Grid.ColumnSpan="3" />
+        <TextBox BorderBrush="Black" Height="28" HorizontalAlignment="Right" Margin="0,181,30,0" x:Name="txtPostfix" TabIndex="1" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="302" KeyUp="UpdateConnectionCombobox" />
+        <Label Content="HTTPS:" FontSize="14" Height="28" HorizontalAlignment="Left" Margin="29,209,0,0" x:Name="lblLogin_Copy" VerticalAlignment="Top" Width="111" IsEnabled="True" />
+        <CheckBox x:Name="cbxHttps" Content="Use HTTPS connection" Margin="182,214,0,0" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="302"/>
+    </Grid>
+</Window>

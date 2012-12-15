@@ -1,0 +1,43 @@
+﻿<Window x:Class="QLogBrowser.LogDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Log details" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" Width="642" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="608" Topmost="True" Background="White" KeyDown="Window_KeyDown" MouseWheel="Window_MouseWheel">
+    <Grid Width="622" Margin="7,10,7,0" Height="569" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Content="Log details" FontSize="16" FontWeight="Bold" Height="32" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="0,2,0,0" Name="label1" VerticalAlignment="Top" VerticalContentAlignment="Top" Width="464" Padding="145,5,5,5" />
+        <TabControl Height="523" HorizontalAlignment="Left" Margin="12,32,0,0" Name="tbcPages" VerticalAlignment="Top" Width="598">
+            <TabItem Header="Message">
+                <TextBox Height="459" Name="txtMessage" Width="588" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsTab="True" AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" />
+            </TabItem>
+            <TabItem Header="General informations" Name="tabItem1">
+                <Grid Background="White" Margin="0,0,0,2">
+                    <Label Content="Id:" Height="32" HorizontalAlignment="Left" Margin="6,14,0,0" Name="label2" VerticalAlignment="Top" Width="49" FontSize="14" FontStyle="Italic" />
+                    <Label Content="Area:" FontSize="14" FontStyle="Italic" Height="32" Margin="6,44,0,0" Name="label3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="49" />
+                    <Label Content="Thread id:" FontSize="16" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="6,170,0,0" Name="label4" VerticalAlignment="Top" Width="135" />
+                    <Label Content="Session id:" FontSize="16" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="6,219,0,0" Name="label5" VerticalAlignment="Top" Width="135" />
+                    <Label Content="User agent:" FontSize="16" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="6,257,0,0" Name="label6" VerticalAlignment="Top" Width="135" />
+                    <Label Content="User host:" FontSize="16" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="6,376,0,0" Name="label7" VerticalAlignment="Top" Width="135" />
+                    <Label Content="Class:" FontSize="16" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="6,77,0,0" Name="label8" VerticalAlignment="Top" Width="135" />
+                    <Label Content="Method:" FontSize="16" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="6,115,0,0" Name="label9" VerticalAlignment="Top" Width="135" />
+                    <Label Content="Date:" FontSize="14" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="351,14,0,0" Name="label10" VerticalAlignment="Top" Width="45" />
+                    <Label Content="DEBUG" FontSize="14" FontStyle="Normal" Height="32" HorizontalAlignment="Right" HorizontalContentAlignment="Left" Margin="0,44,6,0" Name="lblArea" VerticalAlignment="Top" Width="435" />
+                    <TextBox Height="32" HorizontalAlignment="Left" Margin="147,77,0,0" Name="txtClass" VerticalAlignment="Top" Width="435" Style="{StaticResource FakeLabel}" Text="QLogTests.MainWindow" />
+                    <TextBox Height="32" HorizontalAlignment="Left" Margin="147,115,0,0" Name="txtMethod" Style="{StaticResource FakeLabel}" Text="Initialize()" VerticalAlignment="Top" Width="435" />
+                    <TextBox Height="32" HorizontalAlignment="Left" Margin="147,170,0,0" Name="txtThreadId" Style="{StaticResource FakeLabel}" Text="5276432" VerticalAlignment="Top" Width="435" />
+                    <TextBox Height="32" HorizontalAlignment="Left" Margin="147,219,0,0" Name="txtSessionId" Style="{StaticResource FakeLabel}" Text="pkvz0elkf020rhby5m25l1se" VerticalAlignment="Top" Width="435" />
+                    <TextBox Height="111" HorizontalAlignment="Left" Margin="147,260,0,0" Name="txtUserAgent" Style="{StaticResource FakeLabel}" Text="Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB6; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; OfficeLiveConnector.1.4; OfficeLivePatch.1.3)2011-10-16 20:20:48" VerticalAlignment="Top" Width="435" AcceptsReturn="False" />
+                    <TextBox Height="32" HorizontalAlignment="Left" Margin="147,376,0,0" Name="txtUserHost" Style="{StaticResource FakeLabel}" Text="192.168.134.204" VerticalAlignment="Top" Width="435" />
+                    <TextBox Height="32" HorizontalAlignment="Left" Margin="147,18,0,0" Name="txtId" VerticalAlignment="Top" Width="177" Style="{StaticResource FakeLabel}" BorderThickness="0" Text="132" FontSize="14" Padding="3,1,1,1" />
+                    <TextBox Height="23" HorizontalAlignment="Right" Margin="0,18,6,0" Name="txtDate" VerticalAlignment="Top" Width="180" Text="18-02-2012 14:55:34,567" Style="{StaticResource FakeLabel}" BorderThickness="0" TextAlignment="Right" FontSize="14" />
+                    <Label Content="InstanceId:" FontSize="16" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="6,413,0,0" x:Name="label5_Copy" VerticalAlignment="Top" Width="135" />
+                    <TextBox Height="32" HorizontalAlignment="Left" Margin="147,413,0,0" x:Name="txtInstanceId" Style="{StaticResource FakeLabel}" Text="pkvz0elkf020rhby5m25l1se" VerticalAlignment="Top" Width="435" />
+                    <Label Content="DeploymentId:" FontSize="16" FontStyle="Italic" Height="32" HorizontalAlignment="Left" Margin="6,450,0,0" x:Name="label5_Copy1" VerticalAlignment="Top" Width="135" />
+                    <TextBox Height="32" HorizontalAlignment="Left" Margin="147,450,0,0" x:Name="txtDeploymentId" Style="{StaticResource FakeLabel}" Text="pkvz0elkf020rhby5m25l1se" VerticalAlignment="Top" Width="435" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button x:Name="btnCopyToClipboard" Content="Copy to clipboard" HorizontalAlignment="Left" Margin="464,10,0,0" VerticalAlignment="Top" Width="146" Height="24" Click="btnCopyToClipboard_Click"/>
+    </Grid>
+</Window>

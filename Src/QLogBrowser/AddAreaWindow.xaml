@@ -1,0 +1,12 @@
+﻿<Window x:Class="QLogBrowser.AddAreaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add area" Height="203.895" Width="454" ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" KeyDown="Window_KeyDown">
+    <Grid Margin="0,20,0,7">
+        <Button Content="Add" Height="42" HorizontalAlignment="Left" Margin="10,93,0,0" x:Name="btnAdd" VerticalAlignment="Top" Width="130" FontSize="14" Click="btnAdd_Click" />
+        <Button Content="Cancel" Height="42" Margin="308,93,10,0" x:Name="btCancel" VerticalAlignment="Top" FontSize="14" Click="btCancel_Click" />
+        <Label Content="Area name:" Height="28" HorizontalAlignment="Left" Margin="10,48,0,0" x:Name="label2" VerticalAlignment="Top" Width="111" FontSize="14" />
+        <TextBox BorderBrush="Black" Height="28" Margin="136,48,10,0" x:Name="txtArea" TabIndex="1" VerticalAlignment="Top" VerticalContentAlignment="Center" FontSize="14" KeyDown="txtArea_KeyDown" />
+        <Label Content="Add area" HorizontalAlignment="Left" x:Name="label1" FontSize="16" FontWeight="Bold" Width="448" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="37" VerticalAlignment="Top" RenderTransformOrigin="0.498,0.892" />
+    </Grid>
+</Window>

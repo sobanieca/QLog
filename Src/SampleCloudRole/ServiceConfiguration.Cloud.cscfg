@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="SampleCloudRole" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
+  <Role name="SampleCloudApp">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="QLogArea" value="QTrace" />
+      <Setting name="QLogAsync" value="True" />
+      <Setting name="QLogStacktrace" value="True" />
+      <Setting name="QLogSilentMode" value="True" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

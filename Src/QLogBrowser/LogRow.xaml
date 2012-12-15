@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="QLogBrowser.LogRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" Height="18" Background="White" MouseEnter="Highlight" MouseLeave="RemoveHighlight" Cursor="Hand" MouseLeftButtonDown="UserControl_MouseLeftButtonDown_1">
+    <Grid Height="18">
+        <Border BorderBrush="Black" BorderThickness="0,0,1,1" HorizontalAlignment="Left" Height="18" VerticalAlignment="Top" Width="140">
+            <Label x:Name="lblArea" Content="QInfo" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Height="18" Padding="5,0" FontFamily="Courier New"/>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="0,0,1,1" Height="18" Margin="140,0,180,0" VerticalAlignment="Top">
+            <Label x:Name="lblMessage" Content="Sample log message goes here..." VerticalAlignment="Center" Background="{x:Null}" Margin="0,1" FontSize="16" HorizontalAlignment="Left" Height="18" Padding="5,0" FontFamily="Courier New"/>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="0,0,0,1" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="180">
+            <Label x:Name="lblDate" Content="14.10.2012 14:55:34,544" VerticalAlignment="Top" Background="{x:Null}" Height="18" Padding="5,3,5,0" FontFamily="Courier New" Width="180"/>
+        </Border>
+    </Grid>
+</UserControl>
