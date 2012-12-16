@@ -1,6 +1,7 @@
 QLog - Quick logging for Windows Azure .NET applications
 
 CHANGELOG:
+1.4.2 	-> Another NuGet package update (added tags and ensured that QLog.dll is signed assembly)
 1.4.1.1 -> Minor changes in NuGet package (async logging by default will be disabled - developer will have to enable async 
 	manually).
 1.4.1.0 -> Increasing version due to NuGet package problems.
