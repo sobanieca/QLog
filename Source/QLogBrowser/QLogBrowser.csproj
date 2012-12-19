@@ -41,7 +41,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>QLogBrowserKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>QLogBrowserKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Data.Edm, Version=5.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -188,7 +188,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="QLogBrowserKey.snk" />
+    <None Include="QLogBrowserKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icon64.ico" />
