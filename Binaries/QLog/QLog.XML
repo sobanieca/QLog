@@ -294,13 +294,34 @@
             <param name="area"></param>
             <returns></returns>
         </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsValidLogAreaInner(System.Type)">
+            <summary>
+            Performs area validation check if result wasn't cached
+            </summary>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
         <member name="M:QLog.Components.Config.QLogConfig.IsStacktraceEnabled">
             <summary>
             Specifies whether stacktrace usage is enabled
             </summary>
             <returns></returns>
         </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsStacktraceEnabledInner">
+            <summary>
+            Specifies whether stacktrace usage is enabled
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QLog.Components.Config.QLogConfig.IsAsyncLogEnabled(System.Type)">
+            <summary>
+            Specifies whether asynchronous log writing for given log area is enabled. If it is enabled, then all log entries will be 
+            stored in the buffer and later flushed to the database. Otherwise all messages will be logged directly to the database
+            </summary>
+            <param name="area"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsAsyncLogEnabledInner(System.Type)">
             <summary>
             Specifies whether asynchronous log writing for given log area is enabled. If it is enabled, then all log entries will be 
             stored in the buffer and later flushed to the database. Otherwise all messages will be logged directly to the database
@@ -315,13 +336,32 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsAsyncLogEnabledInner">
+            <summary>
+            Specifies whether asynchronous log writing for any log area is enabled. If it is enabled, then all log entries will be 
+            stored in the buffer and later flushed to the database. Otherwise all messages will be logged directly to the database
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QLog.Components.Config.QLogConfig.IsSilentModeEnabled">
             <summary>
             Specifies whether silent mode is enabled or explicitly disabled
             </summary>
             <returns></returns>
         </member>
+        <member name="M:QLog.Components.Config.QLogConfig.IsSilentModeEnabledInner">
+            <summary>
+            Specifies whether silent mode is enabled or explicitly disabled
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QLog.Components.Config.QLogConfig.GetDataSourcePostfix">
+            <summary>
+            Returns the QLog postfix that will be used when saving logs in data source. For instance it will be added to table name.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QLog.Components.Config.QLogConfig.GetDataSourcePostfixInner">
             <summary>
             Returns the QLog postfix that will be used when saving logs in data source. For instance it will be added to table name.
             </summary>

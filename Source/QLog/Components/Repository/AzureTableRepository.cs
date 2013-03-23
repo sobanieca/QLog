@@ -53,6 +53,7 @@ namespace QLog.Components.Repository
             table.CreateIfNotExists();
             log.PartitionKey = log.CreatedOn.ToString("HH");
             log.RowKey = String.Format("{0}{1}", (DateTime.MaxValue - log.CreatedOn).Ticks.ToString("d19"), log.Guid.ToString("N"));
+            log.Message = log.Message.Trim();
             table.Execute(TableOperation.Insert(log));
         }
 
@@ -104,6 +105,7 @@ namespace QLog.Components.Repository
                         {
                             log.PartitionKey = partitionMapping.PartitionKey;
                             log.RowKey = String.Format("{0}{1}", (DateTime.MaxValue - log.CreatedOn).Ticks.ToString("d19"), log.Guid.ToString("N"));
+                            log.Message = log.Message.Trim();
                             batchOperation.Insert(log);
                         }
                         table.ExecuteBatch(batchOperation);

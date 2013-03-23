@@ -30,6 +30,17 @@ namespace QLog.Components.Config
         private const bool QLOG_SILENT_MODE_DEFAULT = true;
         private const string QLOG_POSTFIX_DEFAULT = "";
 
+        //Cached settings:
+        private static Dictionary<Type, bool> _cacheDictAsync = new Dictionary<Type, bool>();
+        private static Dictionary<Type, bool> _cacheDictArea = new Dictionary<Type, bool>();
+        private static bool? _cacheAsync = null;
+        private static bool? _cacheStacktrace = null;
+        private static bool? _cacheSilentMode = null;
+        private static string _cacheDataPostfix = null;
+        private static string _cacheDataSource = null;
+
+        private static object _locker = new object();
+
         /// <summary>
         /// Reads the current setting basing on the available environment tools
         /// </summary>
@@ -73,6 +84,31 @@ namespace QLog.Components.Config
         /// <returns></returns>
         public bool IsValidLogArea(Type area)
         {
+            if (_cacheDictArea.ContainsKey(area))
+                return _cacheDictArea[area];
+            else
+            {
+                lock (_locker)
+                {
+                    if (!_cacheDictArea.ContainsKey(area))
+                    {
+                        bool result = IsValidLogAreaInner(area);
+                        _cacheDictArea.Add(area, result);
+                        return result;
+                    }
+                    else
+                        return _cacheDictArea[area];
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs area validation check if result wasn't cached
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        private bool IsValidLogAreaInner(Type area)
+        {
             string cfgArea = GetSetting(QLOG_AREA_KEY);
             if (String.IsNullOrWhiteSpace(cfgArea))
                 return QLOG_AREA_DEFAULT;
@@ -94,6 +130,29 @@ namespace QLog.Components.Config
         /// <returns></returns>
         public bool IsStacktraceEnabled()
         {
+            if (_cacheStacktrace != null)
+                return _cacheStacktrace.Value;
+            else
+            {
+                lock (_locker)
+                {
+                    if (_cacheStacktrace == null)
+                    {
+                        _cacheStacktrace = IsStacktraceEnabledInner();
+                        return _cacheStacktrace.Value;
+                    }
+                    else
+                        return _cacheStacktrace.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether stacktrace usage is enabled
+        /// </summary>
+        /// <returns></returns>
+        private bool IsStacktraceEnabledInner()
+        {
             string stacktrace = GetSetting(QLOG_STACKTRACE_KEY);
             if (String.IsNullOrWhiteSpace(stacktrace))
                 return QLOG_STACKTRACE_DEFAULT;
@@ -111,6 +170,32 @@ namespace QLog.Components.Config
         /// <param name="area"></param>
         /// <returns></returns>
         public bool IsAsyncLogEnabled(Type area)
+        {
+            if (_cacheDictAsync.ContainsKey(area))
+                return _cacheDictAsync[area];
+            else
+            {
+                lock (_locker)
+                {
+                    if (!_cacheDictAsync.ContainsKey(area))
+                    {
+                        bool result = IsAsyncLogEnabledInner(area);
+                        _cacheDictAsync.Add(area, result);
+                        return result;
+                    }
+                    else
+                        return _cacheDictAsync[area];
+                }
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether asynchronous log writing for given log area is enabled. If it is enabled, then all log entries will be 
+        /// stored in the buffer and later flushed to the database. Otherwise all messages will be logged directly to the database
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public bool IsAsyncLogEnabledInner(Type area)
         {
             string async = GetSetting(QLOG_ASYNC_KEY);
             if (String.IsNullOrWhiteSpace(async))
@@ -134,6 +219,30 @@ namespace QLog.Components.Config
         /// <returns></returns>
         public bool IsAsyncLogEnabled()
         {
+            if (_cacheAsync != null)
+                return _cacheAsync.Value;
+            else
+            {
+                lock (_locker)
+                {
+                    if (_cacheAsync == null)
+                    {
+                        _cacheAsync = IsAsyncLogEnabledInner();
+                        return _cacheAsync.Value;
+                    }
+                    else
+                        return _cacheAsync.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether asynchronous log writing for any log area is enabled. If it is enabled, then all log entries will be 
+        /// stored in the buffer and later flushed to the database. Otherwise all messages will be logged directly to the database
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAsyncLogEnabledInner()
+        {
             string async = GetSetting(QLOG_ASYNC_KEY);
             if (String.IsNullOrWhiteSpace(async))
                 return QLOG_ASYNC_DEFAULT;
@@ -150,6 +259,29 @@ namespace QLog.Components.Config
         /// <returns></returns>
         public bool IsSilentModeEnabled()
         {
+            if (_cacheSilentMode != null)
+                return _cacheSilentMode.Value;
+            else
+            {
+                lock (_locker)
+                {
+                    if (_cacheSilentMode == null)
+                    {
+                        _cacheSilentMode = IsSilentModeEnabledInner();
+                        return _cacheSilentMode.Value;
+                    }
+                    else
+                        return _cacheSilentMode.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether silent mode is enabled or explicitly disabled
+        /// </summary>
+        /// <returns></returns>
+        public bool IsSilentModeEnabledInner()
+        {
             string silentMode = GetSetting(QLOG_SILENT_MODE_KEY);
             if (String.IsNullOrWhiteSpace(silentMode))
                 return QLOG_STACKTRACE_DEFAULT;
@@ -165,6 +297,29 @@ namespace QLog.Components.Config
         /// </summary>
         /// <returns></returns>
         public string GetDataSourcePostfix()
+        {
+            if (_cacheDataPostfix != null)
+                return _cacheDataPostfix;
+            else
+            {
+                lock (_locker)
+                {
+                    if (_cacheDataPostfix == null)
+                    {
+                        _cacheDataPostfix = GetDataSourcePostfixInner();
+                        return _cacheDataPostfix;
+                    }
+                    else
+                        return _cacheDataPostfix;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the QLog postfix that will be used when saving logs in data source. For instance it will be added to table name.
+        /// </summary>
+        /// <returns></returns>
+        public string GetDataSourcePostfixInner()
         {
             string tableName = GetSetting(QLOG_POSTFIX_KEY);
             if (String.IsNullOrWhiteSpace(tableName))
@@ -217,7 +372,21 @@ namespace QLog.Components.Config
         /// <returns></returns>
         public string GetDataSource()
         {
-            return ConfigurationManager.ConnectionStrings[DATA_SOURCE_KEY].ConnectionString;
+            if (_cacheDataSource != null)
+                return _cacheDataSource;
+            else
+            {
+                lock (_locker)
+                {
+                    if (_cacheDataSource == null)
+                    {
+                        _cacheDataSource = ConfigurationManager.ConnectionStrings[DATA_SOURCE_KEY].ConnectionString;
+                        return _cacheDataSource;
+                    }
+                    else
+                        return _cacheDataSource;
+                }
+            }
         }
     }
 }

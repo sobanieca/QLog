@@ -13,6 +13,8 @@ namespace SampleCloudApp.Controllers
         public ActionResult Index()
         {
             QLog.Logger.LogTrace("/Home/Index called");
+            QLog.Logger.LogDebug("Sample debug message");
+            QLog.Logger.LogTrace("Sample trace message  ");
 
             ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
 

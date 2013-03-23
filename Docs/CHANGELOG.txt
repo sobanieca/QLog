@@ -1,6 +1,8 @@
 QLog - Quick logging for Windows Azure .NET applications
 
 CHANGELOG:
+1.4.6	-> Trim() fix for messages, no more "400 bad request" response in case when message contained whitespace at the end
+	* Significant performance improvement
 1.4.5	-> Fix for Azure Table entities to avoid RowKey conflicts
 	* Fix for SaveAll() in QLogRepository - now single batch operation will be performed with the same partition key
 	* CleanLogsOlderThan() - fixed bug with postfix
