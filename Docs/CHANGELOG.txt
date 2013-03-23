@@ -1,6 +1,10 @@
 QLog - Quick logging for Windows Azure .NET applications
 
 CHANGELOG:
+1.4.5	-> Fix for Azure Table entities to avoid RowKey conflicts
+	* Fix for SaveAll() in QLogRepository - now single batch operation will be performed with the same partition key
+	* CleanLogsOlderThan() - fixed bug with postfix
+	* QLogDataSourcePostfix - added validation if postfix meets Azure Table naming requirements
 1.4.4	-> NuGet package readme.txt update
 1.4.3	-> NuGet package update
 1.4.2 	-> Another NuGet package update (added tags and ensured that QLog.dll is signed assembly)

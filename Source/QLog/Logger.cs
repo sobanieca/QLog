@@ -328,7 +328,6 @@ namespace QLog
         /// Creates and saves a log message at the specified QArea. Depending on the settings the message is being saved to buffer 
         /// that will be flushed asynchronously later, or directly to the database via IRepository.
         /// </summary>
-        /// <param name="area"></param>
         /// <param name="msg"></param>
         /// <param name="exception"></param>
         /// <param name="args"></param>

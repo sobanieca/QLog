@@ -384,14 +384,9 @@
             </summary>
             <param name="noDays"></param>
         </member>
-        <member name="T:QLog.DataSource.Sql.Exceptions.QLogDatabaseConnectException">
+        <member name="T:QLog.Exceptions.QLogDataSourcePostfixException">
             <summary>
             Exception that is being thrown when logger is unable to connect to the database.
-            </summary>
-        </member>
-        <member name="T:QLog.Exceptions.QLogNotInitializedException">
-            <summary>
-            Exception that is being thrown when logger hasn't been initialized. Namely - when Logger.Initialize() method hasn't been called.
             </summary>
         </member>
         <member name="T:QLog.Exceptions.QLogSilentModeHandleException">
@@ -633,7 +628,6 @@
             Creates and saves a log message at the specified QArea. Depending on the settings the message is being saved to buffer 
             that will be flushed asynchronously later, or directly to the database via IRepository.
             </summary>
-            <param name="area"></param>
             <param name="msg"></param>
             <param name="exception"></param>
             <param name="args"></param>

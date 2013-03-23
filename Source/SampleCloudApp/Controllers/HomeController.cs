@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using SampleCloudApp.LogAreas;
@@ -36,6 +37,11 @@ namespace SampleCloudApp.Controllers
             QLog.Logger.LogTrace("/Home/Contact called");
             QLog.Logger.Log<QSampleArea>("Sample area log.");
 
+
+            for (int i = 0; i < 245; i++)
+            {
+                QLog.Logger.LogInfo("Sampe info message no. {0}", i);
+            }
             ViewBag.Message = "Your contact page.";
 
             return View();

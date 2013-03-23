@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using QLog.Components.Abstract;
+using QLog.Exceptions;
 using QLog.Models;
 
 namespace QLog.Components.Repository
@@ -15,6 +16,29 @@ namespace QLog.Components.Repository
     {
         private const string DEFAULT_TABLE_NAME = "qlog{0}";
         private const string POSTFIX_TABLE_NAME = "qlog{0}{1}";
+
+        private const int BATCH_INSERT_LIMIT = 100;
+        public const string DATA_SOURCE_POSTFIX_ERROR_MESSAGE = "QLog data source postfix can contain only lowercase alpha numeric characters of length at most 40.";
+
+        private Exception _validationException = null;
+
+        public AzureTableRepository()
+        {
+            //Validating data source postfix if it contains chars valid for Azure Table name
+            string postfix = ComponentsService.Config.GetDataSourcePostfix();
+            if (!String.IsNullOrWhiteSpace(postfix))
+            {
+                postfix = postfix.ToLower();
+                string validChars = "abcdefghijklmnopqrstuwvxyz0123456789";
+                foreach (var c in postfix)
+                {
+                    if (validChars.IndexOf(c) == -1)
+                    {
+                        _validationException =  new QLogDataSourcePostfixException(DATA_SOURCE_POSTFIX_ERROR_MESSAGE);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Saves single log entry in data source.
@@ -28,7 +52,7 @@ namespace QLog.Components.Repository
             CloudTable table = tableClient.GetTableReference(tableName);
             table.CreateIfNotExists();
             log.PartitionKey = log.CreatedOn.ToString("HH");
-            log.RowKey = (DateTime.MaxValue - log.CreatedOn).Ticks.ToString("d19");
+            log.RowKey = String.Format("{0}{1}", (DateTime.MaxValue - log.CreatedOn).Ticks.ToString("d19"), log.Guid.ToString("N"));
             table.Execute(TableOperation.Insert(log));
         }
 
@@ -41,38 +65,50 @@ namespace QLog.Components.Repository
             CloudStorageAccount storageAccount = GetStorageAccount();
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
-            Dictionary<string, List<QLogEntry>> tablesMapping = new Dictionary<string, List<QLogEntry>>();
+            List<AzureTableMapping> tablesMapping = new List<AzureTableMapping>();
 
-            foreach (QLogEntry log in logs)
+            foreach (var log in logs)
             {
                 string tableName = GetTableName(log);
-                if (tablesMapping.ContainsKey(tableName))
+                AzureTableMapping tableMapping = tablesMapping.FirstOrDefault(x => x.TableName == tableName);
+                if (tableMapping == null)
                 {
-                    tablesMapping[tableName].Add(log);
+                    tableMapping = new AzureTableMapping() { TableName = tableName };
+                    tablesMapping.Add(tableMapping);
                 }
-                else
+                string partitionKey = log.CreatedOn.ToString("HH");
+                PartitionMapping partitionMapping = tableMapping.PartitionMappings.FirstOrDefault(x => x.PartitionKey == partitionKey);
+                if (partitionMapping == null)
                 {
-                    List<QLogEntry> tableLogs = new List<QLogEntry>();
-                    tableLogs.Add(log);
-                    tablesMapping.Add(tableName, tableLogs);
+                    partitionMapping = new PartitionMapping() { PartitionKey = partitionKey };
+                    tableMapping.PartitionMappings.Add(partitionMapping);
                 }
+                partitionMapping.Logs.Add(log);
             }
 
-            foreach (string key in tablesMapping.Keys)
+            foreach (var tableMapping in tablesMapping)
             {
-                CloudTable table = tableClient.GetTableReference(key);
+                CloudTable table = tableClient.GetTableReference(tableMapping.TableName);
                 table.CreateIfNotExists();
-
-                TableBatchOperation batchOperation = new TableBatchOperation();
-
-                foreach (var log in tablesMapping[key])
+                foreach (var partitionMapping in tableMapping.PartitionMappings)
                 {
-                    log.PartitionKey = log.CreatedOn.ToString("HH");
-                    log.RowKey = (DateTime.MaxValue - log.CreatedOn).Ticks.ToString("d19");
-                    batchOperation.Insert(log);
+                    List<QLogEntry> partitionLogs = partitionMapping.Logs;
+                    //For now (23.03.2013) single batch operation may consist of at most 100 entities 
+                    //so there is need to perform "paging" in case when there are more than 100 logs for single partition
+                    int noPages = (int)Math.Ceiling((double)partitionLogs.Count / (double)BATCH_INSERT_LIMIT);
+                    for (int i = 0; i < noPages; i++)
+                    {
+                        var batchLogs = partitionLogs.Skip(BATCH_INSERT_LIMIT * i).Take(BATCH_INSERT_LIMIT);
+                        TableBatchOperation batchOperation = new TableBatchOperation();
+                        foreach (var log in batchLogs)
+                        {
+                            log.PartitionKey = partitionMapping.PartitionKey;
+                            log.RowKey = String.Format("{0}{1}", (DateTime.MaxValue - log.CreatedOn).Ticks.ToString("d19"), log.Guid.ToString("N"));
+                            batchOperation.Insert(log);
+                        }
+                        table.ExecuteBatch(batchOperation);
+                    }
                 }
-
-                table.ExecuteBatch(batchOperation);
             }
         }
 
@@ -84,7 +120,12 @@ namespace QLog.Components.Repository
         {
             CloudStorageAccount storageAccount = GetStorageAccount();
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            List<CloudTable> qLogTables = new List<CloudTable>(tableClient.ListTables("qlog"));
+            string tablePrefix = "qlog";
+            if (!String.IsNullOrWhiteSpace(ComponentsService.Config.GetDataSourcePostfix()))
+            {
+                tablePrefix = String.Format("qlog{0}", ComponentsService.Config.GetDataSourcePostfix().ToLower());
+            }
+            List<CloudTable> qLogTables = new List<CloudTable>(tableClient.ListTables(tablePrefix));
             string dateLimit = DateTime.UtcNow.AddDays(-1 * noDays).ToString("yyyyMMdd");
             foreach (var qLogTable in qLogTables)
             {
@@ -106,11 +147,40 @@ namespace QLog.Components.Repository
 
         private CloudStorageAccount GetStorageAccount()
         {
+            if (_validationException != null)
+            {
+                Exception e = _validationException;
+                _validationException = null;
+                throw e;
+            }
             var result = CloudStorageAccount.Parse(ComponentsService.Config.GetDataSource());
             ServicePoint tableServicePoint = ServicePointManager.FindServicePoint(result.TableEndpoint);
             tableServicePoint.UseNagleAlgorithm = false;
             tableServicePoint.Expect100Continue = false;
             return result;
         }
+
+        private class AzureTableMapping
+        {
+            public string TableName { get; set; }
+            public List<PartitionMapping> PartitionMappings { get; set; }
+
+            public AzureTableMapping()
+            {
+                PartitionMappings = new List<PartitionMapping>();
+            }
+        }
+
+        private class PartitionMapping
+        {
+            public string PartitionKey { get; set; }
+            public List<QLogEntry> Logs { get; set; }
+
+            public PartitionMapping()
+            {
+                Logs = new List<QLogEntry>();
+            }
+        }
+
     }
 }

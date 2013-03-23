@@ -8,7 +8,7 @@ namespace QLog.Models
     /// </summary>
     public class QLogEntry : TableEntity
     {
-        public long Id { get; set; }
+        public Guid Guid { get; set; }
         public string Message { get; set; }
         public string Area { get; set; }
         public string AreaColor { get; set; }

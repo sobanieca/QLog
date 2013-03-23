@@ -7,7 +7,7 @@
       <Setting name="QLogArea" value="QTrace" />
       <Setting name="QLogAsync" value="True" />
       <Setting name="QLogStacktrace" value="True" />
-      <Setting name="QLogSilentMode" value="True" />
+      <Setting name="QLogSilentMode" value="False" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

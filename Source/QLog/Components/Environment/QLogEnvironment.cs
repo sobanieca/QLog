@@ -17,6 +17,8 @@ namespace QLog.Components.Environment
     /// </summary>
     internal class QLogEnvironment : IEnvironment
     {
+        private Random _rand = new Random();
+
         /// <summary>
         /// Returns QLog entry basing on the passed informations
         /// </summary>
@@ -28,6 +30,7 @@ namespace QLog.Components.Environment
         public QLogEntry GetLog(Type area, string msg, string className, string methodName)
         {
             QLogEntry result = new QLogEntry();
+            result.Guid = Guid.NewGuid();
             result.Message = msg;
             result.Area = area.Name;
             result.AreaColor = AreaHelper.GetAreaColor(area);
