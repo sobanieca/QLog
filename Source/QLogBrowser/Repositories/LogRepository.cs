@@ -19,7 +19,8 @@ namespace QLogBrowser.Repositories
         {
             CloudStorageAccount storageAccount = GetStorageAccount(settings);
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            List<CloudTable> qLogTables = new List<CloudTable>(tableClient.ListTables("qlog"));
+            string tablePrefix = GetTablePrefix(settings);
+            List<CloudTable> qLogTables = new List<CloudTable>(tableClient.ListTables(tablePrefix));
             string dateLimit = DateTime.UtcNow.AddDays(-1 * settings.DeleteLogsNoDays).ToString("yyyyMMdd");
             foreach (var qLogTable in qLogTables)
             {
@@ -27,6 +28,17 @@ namespace QLogBrowser.Repositories
                 if (String.Compare(tableDate, dateLimit) == -1)
                     qLogTable.DeleteIfExists();
             }
+        }
+
+        private string GetTablePrefix(QLogBrowserSettings settings)
+        {
+            StorageConnection currentConnection = settings.Connections.FirstOrDefault(x => x.IsSelected);
+            string tablePrefix = "qlog";
+            if (!String.IsNullOrWhiteSpace(currentConnection.SourceDataPostfix))
+            {
+                tablePrefix = String.Format("qlog{0}", currentConnection.SourceDataPostfix.ToLower());
+            }
+            return tablePrefix;
         }
 
         public List<QLog> LoadLogs(QLogBrowserSettings settings)
