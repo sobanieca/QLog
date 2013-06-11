@@ -97,7 +97,7 @@
     <Compile Include="Components\Repository\AzureTableRepository.cs" />
     <Compile Include="Components\Repository\DebugRepository.cs" />
     <Compile Include="Exceptions\QLogDataSourcePostfixException.cs" />
-    <Compile Include="Exceptions\QLogSilentModeHandleException.cs" />
+    <Compile Include="Exceptions\QLogDataSourceException.cs" />
     <Compile Include="Helpers\AreaHelper.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
     <Compile Include="Helpers\TruncateHelper.cs" />

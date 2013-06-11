@@ -19,12 +19,28 @@ namespace QLog.Components.Repository
 
         private const int BATCH_INSERT_LIMIT = 100;
         public const string DATA_SOURCE_POSTFIX_ERROR_MESSAGE = "QLog data source postfix can contain only lowercase alpha numeric characters of length at most 40.";
+        public const string DATA_SOURCE_NOT_FOUND_MESSAGE = "QLogDataSource connection string was not found. Please ensure that it is present in the *.config file";
 
         private Exception _validationException = null;
 
         public AzureTableRepository()
         {
-            //Validating data source postfix if it contains chars valid for Azure Table name
+            ValidateDataSource();
+            if(_validationException == null)            
+                ValidatePostfix();
+        }
+
+        //Validating if DataSource connection string is present
+        private void ValidateDataSource()
+        {
+            string dataSource = ComponentsService.Config.GetDataSource();
+            if (String.IsNullOrWhiteSpace(dataSource))
+                _validationException = new QLogDataSourceException(DATA_SOURCE_NOT_FOUND_MESSAGE);
+        }
+
+        //Validating data source postfix if it contains chars valid for Azure Table name
+        private void ValidatePostfix()
+        {
             string postfix = ComponentsService.Config.GetDataSourcePostfix();
             if (!String.IsNullOrWhiteSpace(postfix))
             {
@@ -34,7 +50,7 @@ namespace QLog.Components.Repository
                 {
                     if (validChars.IndexOf(c) == -1)
                     {
-                        _validationException =  new QLogDataSourcePostfixException(DATA_SOURCE_POSTFIX_ERROR_MESSAGE);
+                        _validationException = new QLogDataSourcePostfixException(DATA_SOURCE_POSTFIX_ERROR_MESSAGE);
                     }
                 }
             }

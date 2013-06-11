@@ -19,27 +19,30 @@ namespace QLog.Components
         private static IConfig _config;
         private static IRepository _repository;
 
-        public const string SILENT_MODE_HANDLE_ERROR_MESSAGE = "QLog was unable to verify whether SilentMode is enabled or disabled. There appears to be a problem with IConfig component.";
+        public static IEnvironment Environment { get { DetermineInit(); return _environment; } set { _environment = value; } }
+        public static IBuffer Buffer { get { DetermineInit(); return _buffer; } set { _buffer = value; } }
+        public static IConfig Config { get { DetermineInit(); return _config; } set { _config = value; } }
+        public static IRepository Repository { get { DetermineInit(); return _repository; } set { _repository = value; } }
 
-        public static IEnvironment Environment { get { return _environment; } set { _environment = value; } }
-        public static IBuffer Buffer { get { return _buffer; } set { _buffer = value; } }
-        public static IConfig Config { get { return _config; } set { _config = value; } }
-        public static IRepository Repository { get { return _repository; } set { _repository = value; } }
-
-        static ComponentsService()
-        {
-            InitializeComponents();
-        }
+        private static bool _isInitialized = false;
+        private static object _locker = new object();
 
         /// <summary>
         /// Initializes QLog with components found within assembly
         /// </summary>
         private static void InitializeComponents()
         {
-            _environment = new QLogEnvironment();
-            _buffer = new QLogBuffer();
-            _config = new QLogConfig();
-            _repository = ResolveRepository();
+            try
+            {
+                _environment = new QLogEnvironment();
+                _buffer = new QLogBuffer();
+                _config = new QLogConfig();
+                _repository = ResolveRepository();
+            }
+            catch (Exception e)
+            {
+                SilentModeHandle(e);
+            }
         }
 
         /// <summary>
@@ -64,17 +67,37 @@ namespace QLog.Components
         /// <param name="exceptionToHandle"></param>
         public static void SilentModeHandle(Exception exceptionToHandle)
         {
-            bool isSilentModeEnabled = false;
-            try
+            bool isSilentModeEnabled = true;
+            if (_config != null)
             {
-                isSilentModeEnabled = _config.IsSilentModeEnabled();
-            }
-            catch (Exception e)
-            {
-                throw new QLogSilentModeHandleException(SILENT_MODE_HANDLE_ERROR_MESSAGE, e);
+                try
+                {
+                    bool configSilentMode = _config.IsSilentModeEnabled();
+                    isSilentModeEnabled = configSilentMode;
+                }
+                catch (Exception)
+                { } //QLog is not going to raise any exception if it won't be able to determine if SilentMode is ON or OFF
             }
             if (!isSilentModeEnabled)
                 throw exceptionToHandle;
+        }
+
+        /// <summary>
+        /// Initializes ComponentService with component in case when there is need for this
+        /// </summary>
+        private static void DetermineInit()
+        {
+            if (!_isInitialized)
+            {
+                lock (_locker)
+                {
+                    if (!_isInitialized)
+                    {
+                        _isInitialized = true;
+                        InitializeComponents();
+                    }
+                }
+            }
         }
     }
 }

@@ -380,7 +380,11 @@ namespace QLog.Components.Config
                 {
                     if (_cacheDataSource == null)
                     {
-                        _cacheDataSource = ConfigurationManager.ConnectionStrings[DATA_SOURCE_KEY].ConnectionString;
+                        if (ConfigurationManager.ConnectionStrings[DATA_SOURCE_KEY] != null)
+                            _cacheDataSource = ConfigurationManager.ConnectionStrings[DATA_SOURCE_KEY].ConnectionString;
+                        else
+                            _cacheDataSource = ""; 
+                        //setting to different value than null to avoid performance hit in case of QLogDataSource connection string missing
                         return _cacheDataSource;
                     }
                     else

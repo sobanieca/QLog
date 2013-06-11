@@ -5,9 +5,9 @@ namespace QLog.Exceptions
     /// <summary>
     /// Exception that is being thrown when logger is unable to verify if the silent mode is enabled or disabled.
     /// </summary>
-    internal class QLogSilentModeHandleException : ApplicationException
+    internal class QLogDataSourceException : ApplicationException
     {
-        public QLogSilentModeHandleException(string message, Exception e) : base(message, e)
+        public QLogDataSourceException(string message) : base(message)
         {
             
         }
