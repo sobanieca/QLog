@@ -20,6 +20,11 @@
                 <MenuItem Header="Storage connection..." Click="OpenStorageConnectionWindow"/>
                 <MenuItem Header="More filters..." Click="OpenAdvancedFiltersWindow"/>
             </MenuItem>
+            <MenuItem Header="Docs" Foreground="#FF343434">
+                <MenuItem Header="Quickstart" Click="DocsQuickstart" />
+                <MenuItem Header="Configuration" Click="DocsConfig" />
+                <MenuItem Header="Documentation" Click="DocsDocumentation" />
+            </MenuItem>
             <MenuItem Header="Help" Foreground="#FF343434">
                 <MenuItem Header="About..." Click="OpenAboutWindow"/>
             </MenuItem>

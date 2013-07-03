@@ -18,6 +18,9 @@ using QLogBrowser.Helpers;
 using QLogBrowser.Libs;
 using QLogBrowser.Models;
 using QLogBrowser.Services;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 
 namespace QLogBrowser
 {
@@ -705,6 +708,28 @@ namespace QLogBrowser
                     pnlAreas.Children.Add(cbx);
                 }
             }
+        }
+
+        private void DocsDocumentation(object sender, RoutedEventArgs e)
+        {
+            Process.Start(GetPdfPath("QLog"));
+        }
+
+        private void DocsQuickstart(object sender, RoutedEventArgs e)
+        {
+            Process.Start(GetPdfPath("Quickstart"));
+        }
+
+        private void DocsConfig(object sender, RoutedEventArgs e)
+        {
+            Process.Start(GetPdfPath("Configuration"));
+        }
+
+        private string GetPdfPath(string pdfName)
+        {
+            string result = Assembly.GetExecutingAssembly().Location;
+            result = result.Replace("QLogBrowser.exe", "Resources");
+            return String.Format("{0}\\{1}.pdf", result, pdfName);
         }
     }
 }
